@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
-import { connectToDB } from "./db";
+import { connectDB } from "./db";
 import User from "@/models/User";
 import { z } from "zod";
 
@@ -20,7 +20,7 @@ export const authOptions: NextAuthOptions = {
         const parsed = credsSchema.safeParse(raw);
         if (!parsed.success) return null;
 
-        await connectToDB();
+        await connectDB();
         const user = await User.findOne({ email: parsed.data.email }).lean();
         if (!user) return null;
 
